@@ -1,4 +1,4 @@
-# CellSeg1: Efficient Cell Segmentation with Only One Training Image
+# CellSeg1: Robust Cell Segmentation with One Training Image
 
 [![Python 3.12.7](https://img.shields.io/badge/python-3.12.7-blue.svg)](https://www.python.org/downloads/release/python-3127/)
 [![PyTorch 2.5.1](https://img.shields.io/badge/pytorch-2.5.1-red.svg)](https://pytorch.org/)
