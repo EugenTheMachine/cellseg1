@@ -25,7 +25,7 @@ train_id: [0, 1, 2, 3, 4]
 duplicate_data: 32
 
 # train
-epoch_max: 1  # orig - 300, optimal - 500
+epoch_max: 1  # orig - 300, optimal - 50
 batch_size: 2
 gradient_accumulation_step: 16
 base_lr: 3.0e-3

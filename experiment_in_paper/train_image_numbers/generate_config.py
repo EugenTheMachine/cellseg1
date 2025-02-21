@@ -59,7 +59,8 @@ if __name__ == "__main__":
         elif k == "cellpose_generalized":
             train_num_list = ["full"]
         elif k == "livecell":  # assuming that livecell dataset is full
-            train_num_list = ["full"]
+            # train_num_list = ["full"]
+            train_num_list = ["1"]
         elif k in dataset_1:
             train_num_list = ["1"]
         else:
