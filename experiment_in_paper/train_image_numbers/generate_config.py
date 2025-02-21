@@ -89,13 +89,16 @@ if __name__ == "__main__":
             elif train_num == "full":
                 config["train_id"] = None
 
-            if train_num == "full":
-                if config["dataset_name"] == "deepbacs_rod_brightfield":
-                    config["epoch_max"] = 100
-                else:
-                    config["epoch_max"] = 30
-            else:
-                config["epoch_max"] = 300
+            # if train_num == "full":
+            #     if config["dataset_name"] == "deepbacs_rod_brightfield":
+            #         # config["epoch_max"] = 100
+            #         config["epoch_max"] = 50
+            #     else:
+            #         # config["epoch_max"] = 30
+            #         config["epoch_max"] = 50
+            # else:
+            #     # config["epoch_max"] = 300
+            #     config["epoch_max"] = 50
 
             config["result_dir"] = (
                 f"{dataset['data_dir']}/cellseg1/train_image_numbers/{config_name}"

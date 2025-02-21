@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
             config["train_num"] = 1
             config["train_id"] = [train_id]
-            config["epoch_max"] = 300
+            # config["epoch_max"] = 50
 
             config["result_dir"] = f"{dataset['data_dir']}/cellseg1/robustness/{config_name}"
             config["train_image_dir"] = f"{config['data_dir']}/train/images"
