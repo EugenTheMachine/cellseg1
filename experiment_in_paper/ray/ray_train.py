@@ -63,6 +63,7 @@ if __name__ == "__main__":
     search_space = {
         "config": tune.grid_search(configs),
     }
+    print(search_space)
 
     # tuner = tune.Tuner(
     #     trainable=tune.with_resources(objective, resources={"cpu": 5, "gpu": 1}),
