@@ -19,7 +19,8 @@ def objective(config):
 if __name__ == "__main__":
     # os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5,6,7"
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"  # having only 1 CUDA device
-    os.environ["TUNE_MAX_PENDING_TRIALS_PG"] = "8"  # NOTE: maybe needs to be reduced
+    # os.environ["TUNE_MAX_PENDING_TRIALS_PG"] = "8"  # NOTE: maybe needs to be reduced
+    os.environ["TUNE_MAX_PENDING_TRIALS_PG"] = "4"
     select_dataset = [
         "livecell"
         # "cellpose_generalized",
