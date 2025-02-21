@@ -26,8 +26,8 @@ duplicate_data: 32
 
 # train
 epoch_max: 300
-batch_size: 4
-gradient_accumulation_step: 8
+batch_size: 2
+gradient_accumulation_step: 16
 base_lr: 3.0e-3
 onecycle_lr_pct_start: 0.3
 num_workers: 4
