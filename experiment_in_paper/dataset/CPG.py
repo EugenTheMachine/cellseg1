@@ -1,8 +1,8 @@
 import shutil
 import zipfile
 from pathlib import Path
-# from cellseg1.project_root import DATA_ROOT
-DATA_ROOT = Path("./data/cellseg1")
+from project_root import DATA_ROOT
+# DATA_ROOT = Path("./data/cellseg1")
 
 if __name__ == "__main__":
     train_zip_file = DATA_ROOT / "train.zip"

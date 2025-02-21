@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import yaml
 from tqdm import tqdm
+import sys
+sys.path.append(".")
 
 from data.utils import calculate_cell_statistics, read_mask_to_numpy
 
@@ -25,25 +27,25 @@ def generate_data_statistics(data_root_dir, save_cell_statistics=True):
     ]
     valid_dataset = [
         "cellpose_generalized",
-        "cellpose_specialized",
-        "cellseg_blood",
-        "dsb2018_stardist",
-        "deepbacs_rod_brightfield",
-        "deepbacs_rod_fluorescence",
-        "tissuenet_Breast_20191211_IMC_nuclei",
-        "tissuenet_Breast_20200116_DCIS_nuclei",
-        "tissuenet_Breast_20200526_COH_BC_nuclei",
-        "tissuenet_Epidermis_20200226_Melanoma_nuclei",
-        "tissuenet_Epidermis_20200623_sizun_epidermis_nuclei",
-        "tissuenet_GI_20191219_Eliot_nuclei",
-        "tissuenet_GI_20200219_Roshan_nuclei",
-        "tissuenet_GI_20200627_CODEX_CRC_nuclei",
-        "tissuenet_Lung_20200210_CyCIF_Lung_LN_nuclei",
-        "tissuenet_Lymph_Node_20200114_cHL_nuclei",
-        "tissuenet_Lymph_Node_20200520_HIV_nuclei",
-        "tissuenet_Pancreas_20200512_Travis_PDAC_nuclei",
-        "tissuenet_Pancreas_20200624_CODEX_Panc_nuclei",
-        "tissuenet_Tonsil_20200211_CyCIF_Tonsil_nuclei",
+        # "cellpose_specialized",
+        # "cellseg_blood",
+        # "dsb2018_stardist",
+        # "deepbacs_rod_brightfield",
+        # "deepbacs_rod_fluorescence",
+        # "tissuenet_Breast_20191211_IMC_nuclei",
+        # "tissuenet_Breast_20200116_DCIS_nuclei",
+        # "tissuenet_Breast_20200526_COH_BC_nuclei",
+        # "tissuenet_Epidermis_20200226_Melanoma_nuclei",
+        # "tissuenet_Epidermis_20200623_sizun_epidermis_nuclei",
+        # "tissuenet_GI_20191219_Eliot_nuclei",
+        # "tissuenet_GI_20200219_Roshan_nuclei",
+        # "tissuenet_GI_20200627_CODEX_CRC_nuclei",
+        # "tissuenet_Lung_20200210_CyCIF_Lung_LN_nuclei",
+        # "tissuenet_Lymph_Node_20200114_cHL_nuclei",
+        # "tissuenet_Lymph_Node_20200520_HIV_nuclei",
+        # "tissuenet_Pancreas_20200512_Travis_PDAC_nuclei",
+        # "tissuenet_Pancreas_20200624_CODEX_Panc_nuclei",
+        # "tissuenet_Tonsil_20200211_CyCIF_Tonsil_nuclei",
     ]
     dataset_dict = {}
     for data_dir in data_dirs:

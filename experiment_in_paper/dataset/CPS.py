@@ -1,6 +1,7 @@
 import shutil
 from pathlib import Path
-DATA_ROOT = Path("./data/cellseg1")
+# DATA_ROOT = Path("./data/cellseg1")
+from project_root import DATA_ROOT
 
 if __name__ == "__main__":
     CPG_root_dir = DATA_ROOT / "cellpose_generalized"
