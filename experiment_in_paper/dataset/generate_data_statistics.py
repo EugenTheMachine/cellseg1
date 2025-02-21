@@ -26,7 +26,8 @@ def generate_data_statistics(data_root_dir, save_cell_statistics=True):
         ".nii.gz",
     ]
     valid_dataset = [
-        "cellpose_generalized",
+        "livecell",
+        # "cellpose_generalized",
         # "cellpose_specialized",
         # "cellseg_blood",
         # "dsb2018_stardist",
@@ -50,6 +51,7 @@ def generate_data_statistics(data_root_dir, save_cell_statistics=True):
     dataset_dict = {}
     for data_dir in data_dirs:
         dataset_name = data_dir.stem
+        print(f"dataset_name = {dataset_name}")
         if dataset_name not in valid_dataset:
             continue
 
@@ -58,7 +60,7 @@ def generate_data_statistics(data_root_dir, save_cell_statistics=True):
             "cellpose_specialized",
             "cellpose_generalized",
         ]:
-            resize_size = None
+            resize_size = [512, 512]
         elif dataset_name.startswith("tissuenet_"):
             resize_size = None
         elif dataset_name == "cellseg_blood":
