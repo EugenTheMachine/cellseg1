@@ -6,11 +6,16 @@ seed: 0
 
 # path
 vit_name: vit_h
-model_path: /data/zhoupeilin/model/sam_vit_h_4b8939.pth
-data_dir: /data/zhoupeilin/data/cellpose_generalized
-result_pth_path: /data/zhoupeilin/data/cellpose_generalized/cellseg1/cellseg1_cellpose_generalized_5/sam_lora.pth
-train_image_dir: /data/zhoupeilin/data/cellpose_generalized/train/images
-train_mask_dir: /data/zhoupeilin/data/cellpose_generalized/train/masks
+# model_path: /data/zhoupeilin/model/sam_vit_h_4b8939.pth
+# data_dir: /data/zhoupeilin/data/cellpose_generalized
+# result_pth_path: /data/zhoupeilin/data/cellpose_generalized/cellseg1/cellseg1_cellpose_generalized_5/sam_lora.pth
+# train_image_dir: /data/zhoupeilin/data/cellpose_generalized/train/images
+# train_mask_dir: /data/zhoupeilin/data/cellpose_generalized/train/masks
+model_path: /kaggle/working/cellseg1/streamlit_storage/sam_backbone/sam_vit_h_4b8939.pth
+data_dir: /kaggle/working/data_dir/cellseg1/livecell
+result_pth_path: /kaggle/working/data_dir/cellseg1/livecell/cellseg1/cellseg1_cellpose_generalized_5/sam_lora.pth
+train_image_dir: /kaggle/working/data_dir/cellseg1/livecell/train/images
+train_mask_dir: /kaggle/working/data_dir/cellseg1/livecell/train/masks
 
 # data
 resize_size: [512, 512]
