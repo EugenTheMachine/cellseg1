@@ -28,11 +28,12 @@ if __name__ == "__main__":
     yaml_save_dir.mkdir(exist_ok=True)
 
     select_dataset = [
-        "cellpose_specialized",
-        "cellseg_blood",
-        "deepbacs_rod_brightfield",
-        "deepbacs_rod_fluorescence",
-        "dsb2018_stardist",
+        "livecell",
+        # "cellpose_specialized",
+        # "cellseg_blood",
+        # "deepbacs_rod_brightfield",
+        # "deepbacs_rod_fluorescence",
+        # "dsb2018_stardist",
     ]
 
     for k, dataset in datasets.items():

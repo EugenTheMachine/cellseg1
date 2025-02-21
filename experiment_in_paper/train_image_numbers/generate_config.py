@@ -23,11 +23,12 @@ if __name__ == "__main__":
     )
 
     select_dataset = [
-        "cellpose_specialized",
-        "cellseg_blood",
-        "deepbacs_rod_brightfield",
-        "deepbacs_rod_fluorescence",
-        "dsb2018_stardist",
+        "livecell",
+        # "cellpose_specialized",
+        # "cellseg_blood",
+        # "deepbacs_rod_brightfield",
+        # "deepbacs_rod_fluorescence",
+        # "dsb2018_stardist",
     ]
     dataset_1 = [
         "tissuenet_Breast_20191211_IMC_nuclei",
@@ -56,6 +57,8 @@ if __name__ == "__main__":
         if k in select_dataset:
             train_num_list = ["5", "10", "full"]
         elif k == "cellpose_generalized":
+            train_num_list = ["full"]
+        elif k == "livecell":  # assuming that livecell dataset is full
             train_num_list = ["full"]
         elif k in dataset_1:
             train_num_list = ["1"]

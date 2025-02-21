@@ -61,8 +61,12 @@ if __name__ == "__main__":
         "config": tune.grid_search(configs),
     }
 
+    # tuner = tune.Tuner(
+    #     trainable=tune.with_resources(objective, resources={"cpu": 5, "gpu": 1}),
+    #     param_space=search_space,
+    # )
     tuner = tune.Tuner(
-        trainable=tune.with_resources(objective, resources={"cpu": 5, "gpu": 1}),
+        trainable=tune.with_resources(objective, resources={"cpu": 1, "gpu": 1}),
         param_space=search_space,
     )
 
