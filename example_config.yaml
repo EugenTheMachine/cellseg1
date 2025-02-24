@@ -21,11 +21,11 @@ train_mask_dir: /kaggle/working/data_dir/cellseg1/livecell/train/masks
 resize_size: [512, 512]
 patch_size: 256
 sam_image_size: 512
-train_id: [0, 1, 2, 3, 4]
+train_id: null
 duplicate_data: 32
 
 # train
-epoch_max: 1  # orig - 300, optimal - 50
+epoch_max: 20  # orig - 300, optimal - 50
 batch_size: 2
 gradient_accumulation_step: 16
 base_lr: 3.0e-3

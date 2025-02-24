@@ -57,7 +57,8 @@ if __name__ == "__main__":
             config["patch_size"] = 256
             config["crop_n_layers"] = 1
 
-            config["train_num"] = 1
+            # config["train_num"] = 1
+            config["train_num"] = "full"
             config["train_id"] = [train_id]
             config["vit_name"] = vit_size
             config["model_path"] = str(sam_models[vit_size])
