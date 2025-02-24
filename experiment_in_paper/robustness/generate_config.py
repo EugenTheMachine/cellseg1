@@ -52,7 +52,7 @@ if __name__ == "__main__":
             config["patch_size"] = 256
             config["crop_n_layers"] = 1
 
-            config["train_num"] = "100"  # Train on the full dataset
+            config["train_num"] = "full"  # Train on the full dataset
             # config["train_id"] = None  # Use all images for training
             config["epoch_max"] = 20  # Train for 20 epochs
 

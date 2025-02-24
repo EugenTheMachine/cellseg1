@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     for k, dataset in all_datasets.items():
         if k in select_dataset:
-            train_num_list = ["100"]  # Reduce the number of trials here
+            train_num_list = ["full"]  # Reduce the number of trials here
         elif k == "cellpose_generalized":
             train_num_list = ["full"]
         elif k in dataset_1:
