@@ -48,20 +48,21 @@ if __name__ == "__main__":
     yaml_save_dir.mkdir(exist_ok=True)
 
     for k, dataset in all_datasets.items():
-        if k in select_dataset:
-            train_num_list = ["full"]  # Reduce the number of trials here
-        elif k == "cellpose_generalized":
-            train_num_list = ["full"]
-        elif k in dataset_1:
-            train_num_list = ["1"]
-        else:
-            continue
+        # if k in select_dataset:
+        #     train_num_list = ["full"]  # Reduce the number of trials here
+        # elif k == "cellpose_generalized":
+        #     train_num_list = ["full"]
+        # elif k in dataset_1:
+        #     train_num_list = ["1"]
+        # else:
+        #     continue
 
-        # Select only 20 images to generate configurations
-        selected_image_indices = range(min(5, len(dataset["data_dir"])))
+        # Select only all images to generate configurations
+        selected_image_indices = range(len(dataset["data_dir"]))
+        train_num_list = ["full"]
 
         for train_num in train_num_list:
-            for idx in selected_image_indices:
+            # for idx in selected_image_indices:
                 with open(example_config) as f:
                     config = yaml.safe_load(f)
 
@@ -69,23 +70,23 @@ if __name__ == "__main__":
                 config["data_dir"] = dataset["data_dir"]
                 config["dataset_name"] = Path(config["data_dir"]).stem
                 config_name = (
-                    f"{config['method_name']}_{config['dataset_name']}_{train_num}_{idx}"
+                    f"{config['method_name']}_{config['dataset_name']}_{train_num}_{0}"
                 )
 
-                config["resize_size"] = dataset["resize_size"]
-                config["patch_size"] = 256
-                config["crop_n_layers"] = 1
+                # config["resize_size"] = dataset["resize_size"]
+                # config["patch_size"] = 256
+                # config["crop_n_layers"] = 1
 
-                config["train_num"] = train_num
+                # config["train_num"] = train_num
                 # config["train_id"] = [idx]
                 # config["train_id"] = None
 
-                config["result_dir"] = (
-                    f"{dataset['data_dir']}/cellseg1/train_image_numbers/{config_name}"
-                )
-                config["train_image_dir"] = f"{config['data_dir']}/train/images"
-                config["train_mask_dir"] = f"{config['data_dir']}/train/masks"
-                config["result_pth_path"] = f"{config['result_dir']}/sam_lora.pth"
+                # config["result_dir"] = (
+                #     f"{dataset['data_dir']}/cellseg1/train_image_numbers/{config_name}"
+                # )
+                # config["train_image_dir"] = f"{config['data_dir']}/train/images"
+                # config["train_mask_dir"] = f"{config['data_dir']}/train/masks"
+                # config["result_pth_path"] = f"{config['result_dir']}/sam_lora.pth"
 
                 yaml_path = yaml_save_dir / f"{config_name}.yaml"
                 with open(yaml_path, "w") as f:

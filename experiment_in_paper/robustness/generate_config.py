@@ -48,18 +48,18 @@ if __name__ == "__main__":
             config["dataset_name"] = Path(config["data_dir"]).stem
             config_name = f"{config['method_name']}_{config['dataset_name']}_{train_id}"
 
-            config["resize_size"] = dataset["resize_size"]
-            config["patch_size"] = 256
-            config["crop_n_layers"] = 1
+            # config["resize_size"] = dataset["resize_size"]
+            # config["patch_size"] = 256
+            # config["crop_n_layers"] = 1
 
-            config["train_num"] = "full"  # Train on the full dataset
+            # config["train_num"] = "full"  # Train on the full dataset
             # config["train_id"] = None  # Use all images for training
-            config["epoch_max"] = 20  # Train for 20 epochs
+            # config["epoch_max"] = 20  # Train for 20 epochs
 
-            config["result_dir"] = f"{dataset['data_dir']}/cellseg1/robustness/{config_name}"
-            config["train_image_dir"] = f"{config['data_dir']}/train/images"
-            config["train_mask_dir"] = f"{config['data_dir']}/train/masks"
-            config["result_pth_path"] = f"{config['result_dir']}/sam_lora.pth"
+            # config["result_dir"] = f"{dataset['data_dir']}/cellseg1/robustness/{config_name}"
+            # config["train_image_dir"] = f"{config['data_dir']}/train/images"
+            # config["train_mask_dir"] = f"{config['data_dir']}/train/masks"
+            # config["result_pth_path"] = f"{config['result_dir']}/sam_lora.pth"
 
             yaml_path = yaml_save_dir / f"{config_name}.yaml"
             with open(yaml_path, "w") as f:
