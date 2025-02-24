@@ -33,7 +33,7 @@ if __name__ == "__main__":
     ]
 
     # Only select the first few dataset ids to reduce the number of trials
-    select_id = [60, 138, 6, 70, 435][:5]  # Choose 20 ids for simplification
+    # select_id = [60, 138, 6, 70, 435][:5]  # Choose 20 ids for simplification
 
     for i, dataset_name in enumerate(select_dataset):
         dataset_now = datasets[dataset_name]
@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
             # Each config name will be unique and identifiable
             config_name = (
-                f"{config['method_name']}_{config['dataset_name']}_train_id_{select_id[i]}_batch_size_{batch_size}"
+                f"{config['method_name']}_{config['dataset_name']}_train_id_{i}_batch_size_{batch_size}"
             )
 
             config["resize_size"] = dataset_now["resize_size"]
