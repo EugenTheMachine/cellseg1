@@ -33,13 +33,13 @@ if __name__ == "__main__":
     for k, dataset in datasets.items():
         if k not in select_dataset:
             continue
-        if k == "dsb2018_stardist":
-            train_ids = sorted(random.sample(list(range(448)), 100))
-        else:
-            # Select only 20 images to generate configurations
-            train_ids = random.sample(list(range(dataset["train_image_num"])), 5)
+        # if k == "dsb2018_stardist":
+        #     train_ids = sorted(random.sample(list(range(448)), 100))
+        # else:
+        #     # Select only 20 images to generate configurations
+        #     train_ids = random.sample(list(range(dataset["train_image_num"])), 5)
 
-        for train_id in train_ids:
+        for train_id in [20]:
             with open(example_config) as f:
                 config = yaml.safe_load(f)
 
