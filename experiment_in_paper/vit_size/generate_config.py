@@ -36,15 +36,17 @@ if __name__ == "__main__":
 
     select_id = [60, 138, 6, 70, 435]
     sam_models = {
-        "vit_h": PROJECT_ROOT / "streamlit_storage" / "sam_backbone" / "sam_vit_h_4b8939.pth",
-        "vit_l": PROJECT_ROOT / "streamlit_storage" / "sam_backbone" / "sam_vit_l_0b3195.pth",
+        # "vit_h": PROJECT_ROOT / "streamlit_storage" / "sam_backbone" / "sam_vit_h_4b8939.pth",
+        # "vit_l": PROJECT_ROOT / "streamlit_storage" / "sam_backbone" / "sam_vit_l_0b3195.pth",
         "vit_b": PROJECT_ROOT / "streamlit_storage" / "sam_backbone" / "sam_vit_b_01ec64.pth",
     }
     for i, dataset_name in enumerate(select_dataset):
         dataset_now = datasets[dataset_name]
         train_id = select_id[i]
 
-        for vit_size in ["vit_b", "vit_l", "vit_h"]:
+        for vit_size in ["vit_b",
+                        #  "vit_l", "vit_h"
+                         ]:
             with open(example_config) as f:
                 config = yaml.safe_load(f)
 
@@ -58,8 +60,9 @@ if __name__ == "__main__":
             config["crop_n_layers"] = 1
 
             # config["train_num"] = 1
-            config["train_num"] = "full"
-            config["train_id"] = [train_id]
+            config["train_num"] = "5"
+            # config["train_id"] = [train_id]
+            # config["train_id"] = None
             config["vit_name"] = vit_size
             config["model_path"] = str(sam_models[vit_size])
 

@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     for k, dataset in all_datasets.items():
         if k in select_dataset:
-            train_num_list = ["5", "full"]  # Reduce the number of trials here
+            train_num_list = ["5"]  # Reduce the number of trials here
         elif k == "cellpose_generalized":
             train_num_list = ["full"]
         elif k in dataset_1:
@@ -58,7 +58,7 @@ if __name__ == "__main__":
             continue
 
         # Select only 20 images to generate configurations
-        selected_image_indices = range(min(20, len(dataset["data_dir"])))
+        selected_image_indices = range(min(5, len(dataset["data_dir"])))
 
         for train_num in train_num_list:
             for idx in selected_image_indices:
@@ -77,7 +77,8 @@ if __name__ == "__main__":
                 config["crop_n_layers"] = 1
 
                 config["train_num"] = train_num
-                config["train_id"] = [idx]
+                # config["train_id"] = [idx]
+                # config["train_id"] = None
 
                 config["result_dir"] = (
                     f"{dataset['data_dir']}/cellseg1/train_image_numbers/{config_name}"

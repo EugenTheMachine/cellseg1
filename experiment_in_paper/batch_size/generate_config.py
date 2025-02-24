@@ -33,7 +33,7 @@ if __name__ == "__main__":
     ]
 
     # Only select the first few dataset ids to reduce the number of trials
-    select_id = [60, 138, 6, 70, 435][:20]  # Choose 20 ids for simplification
+    select_id = [60, 138, 6, 70, 435][:5]  # Choose 20 ids for simplification
 
     for i, dataset_name in enumerate(select_dataset):
         dataset_now = datasets[dataset_name]
@@ -60,8 +60,8 @@ if __name__ == "__main__":
             config["patch_size"] = 256
             config["crop_n_layers"] = 1
 
-            config["train_num"] = "full"  # Train on the full dataset
-            config["train_id"] = None  # Use all images for training
+            config["train_num"] = "5"  # Train on the full dataset
+            # config["train_id"] = None  # Use all images for training
             config["epoch_max"] = 20  # Train for 20 epochs
 
             config["result_dir"] = f"{dataset_now['data_dir']}/cellseg1/batch_size/{config_name}"

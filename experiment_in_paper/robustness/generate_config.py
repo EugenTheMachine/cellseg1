@@ -37,7 +37,7 @@ if __name__ == "__main__":
             train_ids = sorted(random.sample(list(range(448)), 100))
         else:
             # Select only 20 images to generate configurations
-            train_ids = random.sample(list(range(dataset["train_image_num"])), 20)
+            train_ids = random.sample(list(range(dataset["train_image_num"])), 5)
 
         for train_id in train_ids:
             with open(example_config) as f:
@@ -52,8 +52,8 @@ if __name__ == "__main__":
             config["patch_size"] = 256
             config["crop_n_layers"] = 1
 
-            config["train_num"] = "full"  # Train on the full dataset
-            config["train_id"] = None  # Use all images for training
+            config["train_num"] = "5"  # Train on the full dataset
+            # config["train_id"] = None  # Use all images for training
             config["epoch_max"] = 20  # Train for 20 epochs
 
             config["result_dir"] = f"{dataset['data_dir']}/cellseg1/robustness/{config_name}"
