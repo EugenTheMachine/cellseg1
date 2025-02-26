@@ -74,7 +74,7 @@ if __name__ == "__main__":
         trainable=tune.with_resources(objective, resources={"cpu": 1, "gpu": 1}),
         param_space=search_space,
     )
-    tune.logger.setLevel(logging.ERROR)
+    # tune.logger.setLevel(logging.ERROR)
     results = tuner.fit(verbose=0)
 
     (PROJECT_ROOT / "experiment_in_paper/result/").mkdir(exist_ok=True)
