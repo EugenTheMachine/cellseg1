@@ -4,6 +4,7 @@ from typing import Dict, List, Tuple, Union
 
 import cv2
 import numpy as np
+import pandas as pd
 import torch
 import torch.optim as optim
 import yaml
@@ -218,6 +219,7 @@ def train_epoch(
     model.train()
     actual_ga_step = 0
     # training phase
+    total_train_loss = []
     for i_batch, batch_data in enumerate(tqdm(trainloader, desc="Batches", leave=False)):
         if stop_event is not None and stop_event.is_set():
             return
@@ -229,6 +231,7 @@ def train_epoch(
         batch_images, batch_points = to_tensor(images, all_points, config["sam_image_size"])
 
         loss = compute_loss(model, config, batch_images, batch_points, cell_masks, all_points, all_cell_probs)
+        total_train_loss.append(loss.item())
 
         actual_ga_step += 1
         loss_ga = loss / (actual_ga_step if (i_batch + 1) == len(trainloader) else config["gradient_accumulation_step"])
@@ -239,18 +242,22 @@ def train_epoch(
             optimizer.zero_grad()
             actual_ga_step = 0
             scheduler.step()
+    avg_train_loss = sum(total_train_loss) / len(total_train_loss)
+
     # validation phase (here testloader is in fact validation loader)
     model.eval()
-    total_loss = []
-    for i_batch, batch_data in enumerate(tqdm(testloader, desc="Batches", leave=False)):
-        images, true_instance_masks, cell_masks, all_points, all_cell_probs = batch_data
-        if not is_valid_batch(images, all_points):
-            continue
-        batch_images, batch_points = to_tensor(images, all_points, config["sam_image_size"])
-        loss = compute_loss(model, config, batch_images, batch_points, cell_masks, all_points, all_cell_probs)
-        total_loss.append(loss.item())
-    avg_loss = sum(total_loss) / len(total_loss)
-    return avg_loss
+    total_val_loss = []
+    # Use torch.no_grad() to disable gradient tracking during validation
+    with torch.no_grad():
+        for i_batch, batch_data in enumerate(tqdm(testloader, desc="Batches", leave=False)):
+            images, true_instance_masks, cell_masks, all_points, all_cell_probs = batch_data
+            if not is_valid_batch(images, all_points):
+                continue
+            batch_images, batch_points = to_tensor(images, all_points, config["sam_image_size"])
+            loss = compute_loss(model, config, batch_images, batch_points, cell_masks, all_points, all_cell_probs)
+            total_val_loss.append(loss.item())
+    avg_val_loss = sum(total_val_loss) / len(total_val_loss)
+    return avg_train_loss, avg_val_loss
 
 
 def save_model_pth(model: LoRA_Sam, save_path: str):
@@ -283,8 +290,14 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
     best_val_loss = float("inf")
     patience = config['patience']
     current_patience = 0
+    training_log = {
+        "train_loss": [],
+        "val_loss": []
+    }
     for epoch in tqdm(range(config["epoch_max"]), desc="Epochs"):
-        val_loss = train_epoch(model, config, trainloader, testloader, optimizer, scheduler)
+        train_loss, val_loss = train_epoch(model, config, trainloader, testloader, optimizer, scheduler)
+        training_log["train_loss"].append(train_loss)
+        training_log["val_loss"].append(val_loss)
         if save_model:
             save_path = Path(config["result_pth_path"]).parent / f"sam_lora_epoch_{str(epoch).zfill(2)}.pth"
             save_model_pth(model, str(save_path))
@@ -301,10 +314,12 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
                 break
         if config["track_gpu_memory"]:
             memory_stats[epoch] = gpu_memory_tracker.get_memory_stats()
-
+    csv_path = Path(config["result_pth_path"]).parent / "training_log.csv"
+    pd.DataFrame(training_log).to_csv(csv_path, index=False)
+    print(f"Training log saved to {csv_path}")
     if save_model:
         save_model_pth(model, config["result_pth_path"])
-
+    
     if config["track_gpu_memory"]:
         with open(Path(config["result_pth_path"]).parent / "memory_stats.json", "w") as f:
             json.dump(memory_stats, f, indent=4)
