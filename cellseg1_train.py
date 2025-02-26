@@ -286,14 +286,14 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
     for epoch in tqdm(range(config["epoch_max"]), desc="Epochs"):
         val_loss = train_epoch(model, config, trainloader, testloader, optimizer, scheduler)
         if save_model:
-            save_path = config["result_pth_path"] + f"/sam_lora_epoch_{str(epoch).zfill(2)}.pth"
-            save_model_pth(model, save_path)
+            save_path = Path(config["result_pth_path"]).parent / f"sam_lora_epoch_{str(epoch).zfill(2)}.pth"
+            save_model_pth(model, str(save_path))
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             current_patience = 0
             if save_model:
-                save_path = config["result_pth_path"] + f"/sam_lora_best_epoch_{str(epoch).zfill(2)}.pth"
-                save_model_pth(model, save_path)
+                save_path = Path(config["result_pth_path"]).parent / f"sam_lora_best_epoch_{str(epoch).zfill(2)}.pth"
+                save_model_pth(model, str(save_path))
         else:
             current_patience += 1
             if current_patience >= patience:
