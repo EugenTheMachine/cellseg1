@@ -9,7 +9,8 @@ vit_name: vit_b
 model_path: /kaggle/working/cellseg1/streamlit_storage/sam_backbone/sam_vit_b_01ec64.pth
 data_dir: /kaggle/working/data_dir/cellseg1/livecell
 result_dir: /kaggle/working/data_dir/cellseg1/livecell/train_image_numbers/livecell_ckps
-result_pth_path: /kaggle/working/data_dir/cellseg1/livecell/train_image_numbers/livecell_ckps/sam_lora.pth
+# result_pth_path: /kaggle/working/data_dir/cellseg1/livecell/train_image_numbers/livecell_ckps/sam_lora.pth
+result_pth_path: /kaggle/working/data_dir/cellseg1/livecell/train_image_numbers/livecell_ckps
 train_image_dir: /kaggle/working/data_dir/cellseg1/livecell/train/images
 train_mask_dir: /kaggle/working/data_dir/cellseg1/livecell/train/masks
 # model_path: /data/zhoupeilin/model/sam_vit_h_4b8939.pth
@@ -39,7 +40,8 @@ train_num: "full"
 duplicate_data: 32
 
 # train
-epoch_max: 10  # orig - 300, optimal - 50
+epoch_max: 25  # orig - 300, optimal - 50
+patience: 5
 batch_size: 8
 gradient_accumulation_step: 4
 base_lr: 3.0e-3
