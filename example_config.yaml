@@ -42,9 +42,10 @@ train_num: "full"
 duplicate_data: 32
 
 # train
-epoch_max: 25  # orig - 300, optimal - 50
+epoch_max: 30  # orig - 300, optimal - 50
 patience: 5
 batch_size: 8
+val_batch_size: 32
 gradient_accumulation_step: 4
 base_lr: 3.0e-3
 onecycle_lr_pct_start: 0.3

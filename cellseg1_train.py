@@ -79,7 +79,7 @@ def setup_training(
     if test_dataset is not None:
         testloader = DataLoader(
             test_dataset,
-            batch_size=config["batch_size"],
+            batch_size=config["val_batch_size"],
             shuffle=True,
             num_workers=config["num_workers"],
             pin_memory=True,
@@ -242,7 +242,7 @@ def train_epoch(
             optimizer.zero_grad()
             actual_ga_step = 0
             scheduler.step()
-    avg_train_loss = sum(total_train_loss) / len(total_train_loss)
+    train_loss = sum(total_train_loss)
     torch.cuda.empty_cache()
     # validation phase (here testloader is in fact validation loader)
     model.eval()
@@ -256,9 +256,9 @@ def train_epoch(
             batch_images, batch_points = to_tensor(images, all_points, config["sam_image_size"])
             loss = compute_loss(model, config, batch_images, batch_points, cell_masks, all_points, all_cell_probs)
             total_val_loss.append(loss.item())
-    avg_val_loss = sum(total_val_loss) / len(total_val_loss)
+    val_loss = sum(total_val_loss)
     torch.cuda.empty_cache()
-    return avg_train_loss, avg_val_loss
+    return train_loss, val_loss
 
 
 def save_model_pth(model: LoRA_Sam, save_path: str):
