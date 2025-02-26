@@ -315,7 +315,7 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
                 break
         if config["track_gpu_memory"]:
             memory_stats[epoch] = gpu_memory_tracker.get_memory_stats()
-    csv_path = Path(config["result_pth_path"]).parent / "training_log.csv"
+    csv_path = Path(config["result_dir"]).parent / "training_log.csv"
     pd.DataFrame(training_log).to_csv(csv_path, index=False)
     print(f"Training log saved to {csv_path}")
     if save_model:
