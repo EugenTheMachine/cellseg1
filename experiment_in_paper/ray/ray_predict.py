@@ -18,8 +18,8 @@ def objective(config):
 
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5,6,7"
-    os.environ["TUNE_MAX_PENDING_TRIALS_PG"] = "8"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ["TUNE_MAX_PENDING_TRIALS_PG"] = "4"
     select_dataset = [
         "cellpose_generalized",
         "cellpose_specialized",

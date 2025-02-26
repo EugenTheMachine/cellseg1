@@ -94,7 +94,7 @@ def predict_config(config, test_image_folder=None, result_folder=None, save=True
         config["allow_tf32_on_matmul"],
     )
     if test_image_folder is None:
-        image_path = Path(config["data_dir"]) / "test/images"
+        image_path = Path(config["data_dir"]) / "test" / "images"
     else:
         image_path = Path(test_image_folder)
 
