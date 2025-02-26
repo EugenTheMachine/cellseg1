@@ -23,7 +23,7 @@ test_mask_dir: /kaggle/working/data_dir/cellseg1/livecell/test/masks
 # model_path: /kaggle/working/cellseg1/streamlit_storage/sam_backbone/sam_vit_h_4b8939.pth
 
 # data
-resize_size: [704, 520]  # W x H
+resize_size: [512, 512]  # W x H - if set to 704x520, epoch is done in 36 mins instead of 22 mins
 patch_size: 256
 sam_image_size: 512
 # train_id: [0, 1, 2, 3, 4]
@@ -44,9 +44,9 @@ duplicate_data: 32
 # train
 epoch_max: 5  # orig - 300, optimal - 20-30
 patience: 5
-batch_size: 4
+batch_size: 8
 val_batch_size: 8
-gradient_accumulation_step: 8
+gradient_accumulation_step: 4
 base_lr: 3.0e-3
 onecycle_lr_pct_start: 0.3
 num_workers: 4
