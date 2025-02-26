@@ -243,7 +243,7 @@ def train_epoch(
             actual_ga_step = 0
             scheduler.step()
     avg_train_loss = sum(total_train_loss) / len(total_train_loss)
-
+    torch.cuda.empty_cache()
     # validation phase (here testloader is in fact validation loader)
     model.eval()
     total_val_loss = []
@@ -257,6 +257,7 @@ def train_epoch(
             loss = compute_loss(model, config, batch_images, batch_points, cell_masks, all_points, all_cell_probs)
             total_val_loss.append(loss.item())
     avg_val_loss = sum(total_val_loss) / len(total_val_loss)
+    torch.cuda.empty_cache()
     return avg_train_loss, avg_val_loss
 
 
