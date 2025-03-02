@@ -183,9 +183,9 @@ def train_epoch(
     testloader: DataLoader,
     optimizer: optim.Optimizer,
     scheduler: OneCycleLR,
-    stop_event=None,
     len_train: int = 388,
-    len_test: int = 68
+    len_test: int = 68,
+    stop_event=None
 ):
     model.train()
     actual_ga_step = 0
