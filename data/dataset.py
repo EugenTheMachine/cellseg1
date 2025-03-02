@@ -41,13 +41,13 @@ class TrainDataset(Dataset):
             ]
 
         if (patch_size is not None) and (patch_size > 0):
-            for i in range(len(images)):
+            for i, _ in enumerate(images):
                 if min(images[i].shape[0:2]) < patch_size:
                     images[i] = resize_to_short_edge(images[i], short_edge_length=patch_size)
                     masks[i] = resize_to_short_edge(masks[i], short_edge_length=patch_size)
             images, masks = self.split_tiles(images, masks, patch_size)
         elif (resize_short_edge is not None) and (resize_short_edge > 0):
-            for i in range(len(images)):
+            for i, _ in enumerate(images):
                 if min(images[i].shape[0:2]) < resize_short_edge:
                     images[i] = resize_to_short_edge(images[i], short_edge_length=resize_short_edge)
                     masks[i] = resize_to_short_edge(masks[i], short_edge_length=resize_short_edge)
@@ -64,7 +64,7 @@ class TrainDataset(Dataset):
         new_images = []
         new_masks = []
         assert len(images) == len(masks)
-        for i in range(len(images)):
+        for i, _ in enumerate(images):
             image = images[i]
             mask = masks[i]
 

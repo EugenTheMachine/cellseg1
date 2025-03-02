@@ -172,7 +172,9 @@ def create_collate_fn(config):
                     contrast_limit=config["contrast_limit"],
                     p=config["bright_prob"],
                 ),
-                A.Flip(p=config["flip_prob"]),
+                # A.Flip(p=config["flip_prob"]),
+                A.HorizontalFlip(p=config["flip_prob"]),
+                A.VerticalFlip(p=config["flip_prob"]),
                 A.RandomResizedCrop(
                     height=size,
                     width=size,

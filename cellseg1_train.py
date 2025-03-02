@@ -1,4 +1,5 @@
 import json
+import shutil
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
@@ -175,38 +176,6 @@ def compute_loss(
     return cell_prob_loss + ce_loss * config["ce_loss_weight"]
 
 
-# def train_epoch(
-#     model: LoRA_Sam,
-#     config: Dict,
-#     trainloader: DataLoader,
-#     optimizer: optim.Optimizer,
-#     scheduler: OneCycleLR,
-#     stop_event=None,
-# ):
-#     model.train()
-#     actual_ga_step = 0
-#     for i_batch, batch_data in enumerate(tqdm(trainloader, desc="Batches", leave=False)):
-#         if stop_event is not None and stop_event.is_set():
-#             return
-#         images, true_instance_masks, cell_masks, all_points, all_cell_probs = batch_data
-
-#         if not is_valid_batch(images, all_points):
-#             continue
-
-#         batch_images, batch_points = to_tensor(images, all_points, config["sam_image_size"])
-
-#         loss = compute_loss(model, config, batch_images, batch_points, cell_masks, all_points, all_cell_probs)
-
-#         actual_ga_step += 1
-#         loss_ga = loss / (actual_ga_step if (i_batch + 1) == len(trainloader) else config["gradient_accumulation_step"])
-#         loss_ga.backward()
-
-#         if ((i_batch + 1) % config["gradient_accumulation_step"] == 0) or ((i_batch + 1) == len(trainloader)):
-#             optimizer.step()
-#             optimizer.zero_grad()
-#             actual_ga_step = 0
-#             scheduler.step()
-
 def train_epoch(
     model: LoRA_Sam,
     config: Dict,
@@ -215,6 +184,8 @@ def train_epoch(
     optimizer: optim.Optimizer,
     scheduler: OneCycleLR,
     stop_event=None,
+    len_train: int = 388,
+    len_test: int = 68
 ):
     model.train()
     actual_ga_step = 0
@@ -242,7 +213,7 @@ def train_epoch(
             optimizer.zero_grad()
             actual_ga_step = 0
             scheduler.step()
-    train_loss = sum(total_train_loss)
+    train_loss = sum(total_train_loss) / len_train
     torch.cuda.empty_cache()
     # validation phase (here testloader is in fact validation loader)
     model.eval()
@@ -256,7 +227,7 @@ def train_epoch(
             batch_images, batch_points = to_tensor(images, all_points, config["sam_image_size"])
             loss = compute_loss(model, config, batch_images, batch_points, cell_masks, all_points, all_cell_probs)
             total_val_loss.append(loss.item())
-    val_loss = sum(total_val_loss)
+    val_loss = sum(total_val_loss) / len_test
     torch.cuda.empty_cache()
     return train_loss, val_loss
 
@@ -292,13 +263,17 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
     patience = config['patience']
     current_patience = 0
     training_log = {
+        "epoch": [],
         "train_loss": [],
         "val_loss": []
     }
+    shutil.copy2(config_path, config["result_dir"] + "/config.yaml")  # copying cfg file for this training
     for epoch in tqdm(range(config["epoch_max"]), desc="Epochs"):
-        train_loss, val_loss = train_epoch(model, config, trainloader, testloader, optimizer, scheduler)
+        train_loss, val_loss = train_epoch(model, config, trainloader, testloader, optimizer,
+                                           scheduler, config['len_train'], config['len_test'])
         training_log["train_loss"].append(train_loss)
         training_log["val_loss"].append(val_loss)
+        training_log["epoch"].append(epoch)
         if save_model:
             save_path = Path(config["result_pth_path"]).parent / f"sam_lora_epoch_{str(epoch).zfill(2)}.pth"
             save_model_pth(model, str(save_path))
