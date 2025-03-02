@@ -254,7 +254,6 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
     test_dataset = load_eval_dataset(config)
     model = load_model(config)
     trainloader, testloader, optimizer, scheduler = setup_training(config, model, train_dataset, test_dataset)
-
     if config["track_gpu_memory"]:
         gpu_memory_tracker = GPUMemoryTracker()
         gpu_memory_tracker.reset()
@@ -267,7 +266,10 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
         "train_loss": [],
         "val_loss": []
     }
-    shutil.copy2(config_path, config["result_dir"] + "/config.yaml")  # copying cfg file for this training
+    # saving cfg file beforehead
+    with open(config["result_dir"] + "/config.yaml", "w") as file:
+        yaml.dump(config, file, default_flow_style=False, sort_keys=False)
+    # proceeding with actual training
     for epoch in tqdm(range(config["epoch_max"]), desc="Epochs"):
         train_loss, val_loss = train_epoch(model, config, trainloader, testloader, optimizer,
                                            scheduler, config['len_train'], config['len_test'])
