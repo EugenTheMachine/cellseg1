@@ -65,8 +65,8 @@ background_equal_prob: True
 
 # data augment
 data_augmentation: true
-bright_limit: 0.1
-contrast_limit: 0.1
+bright_limit: 0.2
+contrast_limit: 0.2
 bright_prob: 0.5
 flip_prob: 0.5
 rotate_prob: 0.4
