@@ -27,7 +27,7 @@ len_train: 388
 len_test: 68
 
 # train
-epoch_max: 25  # orig - 300, optimal - 20-30
+epoch_max: 2  # orig - 300, optimal - 20-30
 patience: 5
 batch_size: 8
 val_batch_size: 8
