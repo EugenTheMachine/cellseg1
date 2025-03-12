@@ -279,6 +279,9 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
         if save_model or True:
             save_path = Path(config["result_pth_path"]).parent / f"sam_lora_epoch_{str(epoch).zfill(2)}.pth"
             save_model_pth(model, str(save_path))
+            csv_path = Path(config["result_dir"]).parent / "training_log.csv"
+            pd.DataFrame(training_log).to_csv(csv_path, index=False)
+            print(f"Training log saved to {csv_path}")
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             current_patience = 0
