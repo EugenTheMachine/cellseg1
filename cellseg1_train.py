@@ -20,6 +20,7 @@ from peft.sam_lora_image_encoder_mask_decoder import LoRA_Sam
 from sampler import create_collate_fn
 from segment_anything import sam_model_registry
 from set_environment import set_env
+from predict import load_model_from_config
 
 
 def prepare_directories(config: Dict):
@@ -252,8 +253,12 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
 
     train_dataset = load_dataset(config)
     test_dataset = load_eval_dataset(config)
-    model = load_model(config)
-    trainloader, testloader, optimizer, scheduler = setup_training(config, model, train_dataset, test_dataset)
+    # model = load_model(config)
+    model = load_model_from_config(config, empty_lora=False)
+    trainloader, testloader, optimizer, scheduler = setup_training(config,
+                                                                   model,
+                                                                   train_dataset,
+                                                                   test_dataset)
     if config["track_gpu_memory"]:
         gpu_memory_tracker = GPUMemoryTracker()
         gpu_memory_tracker.reset()

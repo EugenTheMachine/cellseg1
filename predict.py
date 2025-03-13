@@ -75,14 +75,16 @@ def predict_images(config, images, progress_callback=None, stop_event=None):
     return pred_masks
 
 
-def load_model_from_config(config, empty_lora=False):
+def load_model_from_config(config, empty_lora=False) -> LoRA_Sam:
     model = sam_model_registry[config["vit_name"]](checkpoint=config["model_path"], image_size=config["sam_image_size"])
     model = LoRA_Sam(model, config)
     model = model.cuda()
     if empty_lora:
         pass
     else:
+        print("Loading LoRa weights for the SAM model...")
         model.load_lora_parameters(Path(config["result_pth_path"]))
+        print("Weights loaded successfully.")
     return model
 
 
