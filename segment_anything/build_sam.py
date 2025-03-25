@@ -49,9 +49,9 @@ def build_sam_vit_b(checkpoint=None, image_size=1024):
     )
 
 
-def build_sam_vit_t(checkpoint=None):
+def build_sam_vit_t(checkpoint=None, image_size=512):
     prompt_embed_dim = 256
-    image_size = 1024
+    # image_size = 1024
     vit_patch_size = 16
     image_embedding_size = image_size // vit_patch_size
     mobile_sam = Sam(
