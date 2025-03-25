@@ -13,6 +13,7 @@ from segment_anything.modeling import (
     PromptEncoder,
     Sam,
     TwoWayTransformer,
+    TinyViT
 )
 
 
