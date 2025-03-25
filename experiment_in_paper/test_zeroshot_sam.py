@@ -4,8 +4,10 @@ import time
 import numpy as np
 import yaml
 from ray import tune
-from segment_anything_org.automatic_mask_generator import SamAutomaticMaskGenerator
-from segment_anything_org.build_sam import build_sam_vit_h
+# from segment_anything_org.automatic_mask_generator import SamAutomaticMaskGenerator
+# from segment_anything_org.build_sam import build_sam_vit_h
+from mobile_sam import build_sam_vit_h
+from mobile_sam import SamAutomaticMaskGenerator
 
 from data.dataset import TestDataset
 from metrics import average_precision
