@@ -13,8 +13,8 @@ from data.utils import (
     resize_image,
 )
 from peft.sam_lora_image_encoder_mask_decoder import LoRA_Sam
-from segment_anything import SamAutomaticMaskGeneratorOptMaskNMS#, sam_model_registry
-from mobile_sam import sam_model_registry
+from segment_anything import SamAutomaticMaskGeneratorOptMaskNMS, sam_model_registry
+# from mobile_sam import sam_model_registry
 from set_environment import set_env
 
 
