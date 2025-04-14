@@ -19,6 +19,7 @@ from gpu_memory_tracker import GPUMemoryTracker
 from peft.sam_lora_image_encoder_mask_decoder import LoRA_Sam
 from sampler import create_collate_fn
 from segment_anything import sam_model_registry
+# from mobile_sam import sam_model_registry
 from set_environment import set_env
 from predict import load_model_from_config
 
@@ -184,8 +185,10 @@ def train_epoch(
     testloader: DataLoader,
     optimizer: optim.Optimizer,
     scheduler: OneCycleLR,
-    len_train: int = 388,
-    len_test: int = 68,
+    epoch: int,
+    val_period: int = 1,
+    len_train: int = 1,
+    len_test: int = 1,
     stop_event=None
 ):
     model.train()
@@ -216,19 +219,22 @@ def train_epoch(
             scheduler.step()
     train_loss = sum(total_train_loss) / len_train
     torch.cuda.empty_cache()
-    # validation phase (here testloader is in fact validation loader)
-    model.eval()
-    total_val_loss = []
-    # Use torch.no_grad() to disable gradient tracking during validation
-    with torch.no_grad():
-        for i_batch, batch_data in enumerate(tqdm(testloader, desc="Batches", leave=False)):
-            images, true_instance_masks, cell_masks, all_points, all_cell_probs = batch_data
-            if not is_valid_batch(images, all_points):
-                continue
-            batch_images, batch_points = to_tensor(images, all_points, config["sam_image_size"])
-            loss = compute_loss(model, config, batch_images, batch_points, cell_masks, all_points, all_cell_probs)
-            total_val_loss.append(loss.item())
-    val_loss = sum(total_val_loss) / len_test
+    if epoch % val_period == 0:
+        # validation phase (here testloader is in fact validation loader)
+        model.eval()
+        total_val_loss = []
+        # Use torch.no_grad() to disable gradient tracking during validation
+        with torch.no_grad():
+            for i_batch, batch_data in enumerate(tqdm(testloader, desc="Batches", leave=False)):
+                images, true_instance_masks, cell_masks, all_points, all_cell_probs = batch_data
+                if not is_valid_batch(images, all_points):
+                    continue
+                batch_images, batch_points = to_tensor(images, all_points, config["sam_image_size"])
+                loss = compute_loss(model, config, batch_images, batch_points, cell_masks, all_points, all_cell_probs)
+                total_val_loss.append(loss.item())
+        val_loss = sum(total_val_loss) / len_test
+    else:
+        val_loss = -1
     torch.cuda.empty_cache()
     return train_loss, val_loss
 
@@ -277,7 +283,8 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
     # proceeding with actual training
     for epoch in tqdm(range(config["epoch_max"]), desc="Epochs"):
         train_loss, val_loss = train_epoch(model, config, trainloader, testloader, optimizer,
-                                           scheduler, config['len_train'], config['len_test'])
+                                           scheduler, epoch=epoch, val_period=config['val_period'],
+                                           len_train=config['len_train'], len_test=config['len_test'])
         training_log["train_loss"].append(train_loss)
         training_log["val_loss"].append(val_loss)
         training_log["epoch"].append(epoch)
@@ -287,16 +294,16 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
             csv_path = Path(config["result_dir"]).parent / "training_log.csv"
             pd.DataFrame(training_log).to_csv(csv_path, index=False)
             print(f"Training log saved to {csv_path}")
-        if val_loss < best_val_loss:
+        if val_loss != -1 and val_loss < best_val_loss:
             best_val_loss = val_loss
             current_patience = 0
             if save_model or True:
                 save_path = Path(config["result_pth_path"]).parent / f"sam_lora_best_epoch_{str(epoch).zfill(2)}.pth"
                 save_model_pth(model, str(save_path))
         else:
-            current_patience += 1
+            current_patience += 1 / config['val_period']
             if current_patience >= patience:
-                print(f"Early stopping at epoch {epoch}. Best val loss: {best_val_loss}")
+                print(f"Early stopping at epoch {int(epoch)}. Best val loss: {best_val_loss}")
                 break
         if config["track_gpu_memory"]:
             memory_stats[epoch] = gpu_memory_tracker.get_memory_stats()

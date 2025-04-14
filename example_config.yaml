@@ -23,11 +23,11 @@ sam_image_size: 512
 train_id: null
 train_num: "full"
 duplicate_data: 32
-len_train: 388
-len_test: 68
+len_train: 1
+len_test: 1
 
 # train
-epoch_max: 25  # orig - 300, optimal - 20-30
+epoch_max: 300  # orig - 300, optimal - 20-30
 patience: 5
 batch_size: 8
 val_batch_size: 8
@@ -35,6 +35,7 @@ gradient_accumulation_step: 4
 base_lr: 3.0e-3
 onecycle_lr_pct_start: 0.3
 num_workers: 4
+val_period: 5
 
 ## Do not change the following parameters unless you know what you are doing
 
