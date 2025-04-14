@@ -1,3 +1,52 @@
+# Dev Notes
+As for now, in order to optimize the SAM model, we need to do the following:
+- [] Decide whether we are using [EfficientSAM](https://github.com/yformer/EfficientSAM), [EfficientViTSAM](https://github.com/mit-han-lab/efficientvit) or maybe even smething else;
+- [] Rewrite LoRa self-injection script in accordance with the structure of the new model (particularly, image encoder) based on where exactly the attention is located. If using ViTSAM model with convolution-based attention layers, utilize loralib for replacing standard layers with LoRa-decomposed layers for further training. *Note: if utilizing loralib, we will need to write a new training pipeline from scratch*;
+- [] Add Float16 conversion for both traiing and inference for memory efficiency;
+- [] Set up, check up, check out everything and finally strat the training process;
+- [] Read about CellSeg1, LoRa, ViT-adapters, ExpeditedSAM models, and EfficientSAM models (both EfficientSAM and EfficientViTSAM).
+
+*Also note: we actually can utilize EfficientSAM model, even though no training script is given - we just build-in its image encoder basically and then can celebrate the victory, as the rest of the training pipeline is kinda already ready.*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # CellSeg1: Robust Cell Segmentation with One Training Image
 
 [![Python 3.12.7](https://img.shields.io/badge/python-3.12.7-blue.svg)](https://www.python.org/downloads/release/python-3127/)

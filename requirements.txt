@@ -16,3 +16,5 @@ kaleido==0.2.1
 ray==2.38.0
 ray[tune]
 timm
+loralib
+git+https://github.com/mit-han-lab/efficientvit.git
