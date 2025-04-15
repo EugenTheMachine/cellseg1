@@ -260,7 +260,13 @@ def main(config_path: Union[str, Dict, Path], save_model: bool = True) -> LoRA_S
     train_dataset = load_dataset(config)
     test_dataset = load_eval_dataset(config)
     # model = load_model(config)
-    model = load_model_from_config(config, empty_lora=False)
+    try:
+        model = load_model_from_config(config, empty_lora=False)
+        print("Successfully loaded LoRa checkpoint. Proceeding with it...")
+    except:
+        print("Failed to load LoRa ckp. Loading raw model instead...")
+        model = load_model(config)
+        print("Successfully loaded raw model. Proceeding with it...")
     trainloader, testloader, optimizer, scheduler = setup_training(config,
                                                                    model,
                                                                    train_dataset,
