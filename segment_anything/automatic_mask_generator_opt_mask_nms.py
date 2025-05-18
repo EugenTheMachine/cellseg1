@@ -163,17 +163,24 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
         """
 
         # Generate masks
+        st = time()
         mask_data = self._generate_masks(image)
+        end = time()
+        print(f"Mask generation time: {end-st}")
 
         # Filter small disconnected regions and holes in masks
         if self.min_mask_region_area > 0:
+            st = time()
             mask_data = self.postprocess_small_regions(
                 mask_data,
                 self.min_mask_region_area,
                 max(self.box_nms_thresh, self.crop_nms_thresh),
             )
+            end = time()
+            print(f"Small region postprocessing time: {end-st}")
 
         # Encode masks
+        st = time()
         if self.output_mode == "coco_rle":
             mask_data["segmentations"] = [
                 coco_encode_rle(rle) for rle in mask_data["rles"]
@@ -182,9 +189,12 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
             mask_data["segmentations"] = [rle_to_mask(rle) for rle in mask_data["rles"]]
         else:
             mask_data["segmentations"] = mask_data["rles"]
+        end = time()
+        print(f"Mask encoding time: {end-st}")
 
         # Write mask records
         curr_anns = []
+        st = time()
         for idx in range(len(mask_data["segmentations"])):
             ann = {
                 "segmentation": mask_data["segmentations"][idx],
@@ -198,6 +208,8 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
             area_ratio = ann["area"] / (image.shape[0] * image.shape[1])
             if area_ratio < self.max_mask_region_area_ratio:
                 curr_anns.append(ann)
+        end = time()
+        print(f"Mask writing time: {end-st}")
 
         return curr_anns
 
@@ -325,7 +337,7 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
         )
         end = time()
         # print(data['stability_score'])
-        print(f"Stability score calculation: {end-st}")
+        # print(f"Stability score calculation: {end-st}")
         if self.stability_score_thresh > 0.0:
             keep_mask = data["stability_score"] >= self.stability_score_thresh
             data.filter(keep_mask)
