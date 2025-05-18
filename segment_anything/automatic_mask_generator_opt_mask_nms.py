@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from .modeling import Sam
 from .predictor import SamPredictor
+from time import time
 from .utils.amg import (
     MaskData,
     area_from_rle,
@@ -237,7 +238,10 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
         x0, y0, x1, y1 = crop_box
         cropped_im = image[y0:y1, x0:x1, :]
         cropped_im_size = cropped_im.shape[:2]
+        st = time()
         self.predictor.set_image(cropped_im)
+        end = time()
+        print(f"Set image time: {end-st}")
 
         # Get points for this crop
         points_scale = np.array(cropped_im_size)[None, ::-1]
@@ -251,7 +255,10 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
             )
             data.cat(batch_data)
             del batch_data
+        st = time()
         self.predictor.reset_image()
+        end = time()
+        print(f"Reset image time: {end-st}")
 
         keep_by_nms = opt_mask_nms(
             data["rles"],
@@ -278,17 +285,23 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
         orig_h, orig_w = orig_size
 
         # Run model on this batch
+        st = time()
         transformed_points = self.predictor.transform.apply_coords(points, im_size)
+        end = time()
+        print(f"Apply coords time: {end-st}")
         in_points = torch.as_tensor(transformed_points, device=self.predictor.device)
         in_labels = torch.ones(
             in_points.shape[0], dtype=torch.int, device=in_points.device
         )
+        st = time()
         masks, iou_preds, _ = self.predictor.predict_torch(
             in_points[:, None, :],
             in_labels[:, None],
             multimask_output=False,
             return_logits=True,
         )
+        end = time()
+        print(f"Pred torch time: {end-st}")
 
         # Serialize predictions and store in MaskData
         data = MaskData(
@@ -304,11 +317,15 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
             data.filter(keep_mask)
 
         # Calculate stability score
+        st = time()
         data["stability_score"] = calculate_stability_score(
             data["masks"],
             self.predictor.model.mask_threshold,
             self.stability_score_offset,
         )
+        end = time()
+        # print(data['stability_score'])
+        print(f"Stability score calculation: {end-st}")
         if self.stability_score_thresh > 0.0:
             keep_mask = data["stability_score"] >= self.stability_score_thresh
             data.filter(keep_mask)
