@@ -166,7 +166,7 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
         st = time()
         mask_data = self._generate_masks(image)
         end = time()
-        print(f"Mask generation time: {end-st}")
+        # print(f"Mask generation time: {end-st}")
 
         # Filter small disconnected regions and holes in masks
         if self.min_mask_region_area > 0:
@@ -177,7 +177,7 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
                 max(self.box_nms_thresh, self.crop_nms_thresh),
             )
             end = time()
-            print(f"Small region postprocessing time: {end-st}")
+            # print(f"Small region postprocessing time: {end-st}")
 
         # Encode masks
         st = time()
@@ -190,7 +190,7 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
         else:
             mask_data["segmentations"] = mask_data["rles"]
         end = time()
-        print(f"Mask encoding time: {end-st}")
+        # print(f"Mask encoding time: {end-st}")
 
         # Write mask records
         curr_anns = []
@@ -209,7 +209,7 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
             if area_ratio < self.max_mask_region_area_ratio:
                 curr_anns.append(ann)
         end = time()
-        print(f"Mask writing time: {end-st}")
+        # print(f"Mask writing time: {end-st}")
 
         return curr_anns
 
@@ -221,9 +221,14 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
 
         # Iterate over image crops
         data = MaskData()
+        st = time()
+        c = 0
         for crop_box, layer_idx in zip(crop_boxes, layer_idxs):
             crop_data = self._process_crop(image, crop_box, layer_idx, orig_size)
             data.cat(crop_data)
+            c += 1
+        end = time()
+        print(f"Done {c} iterations of crop processing in {end-st}")
 
         # Remove duplicate masks between crops
         if len(crop_boxes) > 1:
