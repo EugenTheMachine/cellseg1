@@ -343,6 +343,7 @@ class SamAutomaticMaskGeneratorOptMaskNMS:
         st = time()
         if self.pred_iou_thresh > 0.0:
             keep_mask = data["iou_preds"] > self.pred_iou_thresh
+            print(f"TYPE: {type(keep_mask)}")
             data.filter(keep_mask)
         end = time()
         df['phase'].append("filtering by iou")
